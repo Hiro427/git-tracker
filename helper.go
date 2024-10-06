@@ -172,7 +172,6 @@ func main() {
 	appendCwdFlag := flag.Bool("append-cwd", false, "Append the current working directory to repos.txt")
 	listReposFlag := flag.Bool("list-repos", false, "List all repositories in repos.txt")
 	openGit := flag.Bool("open-repo", false, "Open Repo in Current Directory on github.com")
-
 	flag.Parse()
 
 	if *appendCwdFlag {
