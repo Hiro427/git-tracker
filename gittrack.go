@@ -11,6 +11,8 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/go-git/go-git/v5"
+	"github.com/pkg/browser"
+	"gopkg.in/ini.v1"
 )
 
 func gitStatus(path string) bool {
@@ -150,10 +152,26 @@ func printTable() {
 	writer.Flush()
 }
 
+func openRepo() {
+
+	gitDir := filepath.Join(".git", "config")
+	cfg, _ := ini.Load(gitDir)
+
+	remoteOrigin := cfg.Section(`remote "origin"`)
+	originURL := remoteOrigin.Key("url").String()
+	err := browser.OpenURL(originURL)
+	if err != nil {
+		fmt.Println("Failed to Open URL:", err)
+
+	}
+
+}
+
 func main() {
 
 	appendCwdFlag := flag.Bool("append-cwd", false, "Append the current working directory to repos.txt")
 	listReposFlag := flag.Bool("list-repos", false, "List all repositories in repos.txt")
+	openGit := flag.Bool("open-repo", false, "Open Repo in Current Directory on github.com")
 
 	flag.Parse()
 
@@ -164,6 +182,9 @@ func main() {
 	if *listReposFlag {
 		printTable()
 
+	}
+	if *openGit {
+		openRepo()
 	}
 
 }
