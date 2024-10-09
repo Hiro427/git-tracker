@@ -21,7 +21,7 @@ func gitac(commit string) {
 		log.Fatal(commitErr)
 	}
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("Files Committed\nProceed to push files?\n(y/n): ")
+	fmt.Print("Files Committed\nProceed to push files?\n(y/n): ")
 	response, _ := reader.ReadString('\n')
 	response = strings.TrimSpace(response)
 	if response == "y" {
