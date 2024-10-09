@@ -1,33 +1,38 @@
 package main
 
 import (
+	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"strings"
 )
 
-func main() {
-	if len(os.Args) < 2 {
-		log.Fatal("Commit message required")
-	}
+func gitac(commit string) {
 	gitAdd := exec.Command("git", "add", ".")
 	err := gitAdd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
-	commit := strings.Join(os.Args[1:], " ")
 	gitCommit := exec.Command("git", "commit", "-m", commit)
 	commitErr := gitCommit.Run()
 	if commitErr != nil {
 		log.Fatal(commitErr)
 	}
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Println("Files Committed \n Proceed to push files? (y/n): ")
+	response, _ := reader.ReadString('\n')
+	response = strings.TrimSpace(response)
+	if response == "y" {
 
-	gitP := exec.Command("git", "push", "-u", "origin", "main")
+		gitP := exec.Command("git", "push", "-u", "origin", "main")
+		gitPErr := gitP.Run()
+		if gitPErr != nil {
+			log.Fatal(gitPErr)
+		}
+		fmt.Println("Files pushed to main")
 
-	gitPErr := gitP.Run()
-	if gitPErr != nil {
-		log.Fatal(gitPErr)
 	}
 
 }
