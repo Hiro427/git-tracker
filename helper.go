@@ -2,10 +2,13 @@ package main
 
 import (
 	"bufio"
+    "os/exec"
 	"flag"
 	"fmt"
 	"os"
+	// "path"
 	"path/filepath"
+    "log"
 	"strings"
 	"text/tabwriter"
 
@@ -57,6 +60,34 @@ func gitStatus(path string) bool {
 	return stat
 }
 
+func gitac(commit string) {
+	gitAdd := exec.Command("git", "add", ".")
+	err := gitAdd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+	gitCommit := exec.Command("git", "commit", "-m", commit)
+	commitErr := gitCommit.Run()
+	if commitErr != nil {
+		log.Fatal(commitErr)
+	}
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Files Committed\nProceed to push files?\n(y/n): ")
+	response, _ := reader.ReadString('\n')
+	response = strings.TrimSpace(response)
+	if response == "y" {
+
+		gitP := exec.Command("git", "push", "-u", "origin", "main")
+		gitPErr := gitP.Run()
+		if gitPErr != nil {
+			log.Fatal(gitPErr)
+		}
+		fmt.Println("Files pushed to main")
+
+	}
+
+}
+
 func readRepoPaths(filePath string) ([]string, error) {
 	// Open the file
 
@@ -89,15 +120,17 @@ func readRepoPaths(filePath string) ([]string, error) {
 	return paths, nil
 }
 
-func appendCwdToFile(filePath string) error {
+func appendCwdToFile() error {
 	// Get the current working directory (CWD)
 	cwd, err := os.Getwd()
 	if err != nil {
 		return fmt.Errorf("failed to get current directory: %w", err)
 	}
 
+    path := os.Getenv("REPO_FPATH")
+
 	// Open the repos.txt file in append mode (or create it if it doesn't exist)
-	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("failed to open repos.txt file: %w", err)
 	}
@@ -169,13 +202,14 @@ func openRepo() {
 
 func main() {
 
-	appendCwdFlag := flag.Bool("append-cwd", false, "Append the current working directory to repos.txt")
+	appendCwdFlag := flag.Bool("track-repo", false, "Append the current working directory to repos.txt")
 	listReposFlag := flag.Bool("list-repos", false, "List all repositories in repos.txt")
 	openGit := flag.Bool("open-repo", false, "Open Repo in Current Directory on github.com")
+    pushGit := flag.String("update-repo", "", "Adds all Files, Commits files with message and pushes to main")
 	flag.Parse()
 
 	if *appendCwdFlag {
-		appendCwdToFile(os.Getenv("REPOS_FPATH"))
+		appendCwdToFile()
 	}
 
 	if *listReposFlag {
@@ -185,5 +219,9 @@ func main() {
 	if *openGit {
 		openRepo()
 	}
+    if *pushGit != "" {
+        gitac(*pushGit)
+
+    }
 
 }
