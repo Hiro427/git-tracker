@@ -114,7 +114,7 @@ func appendCwdToFile(filePath string) error {
 func printTable() {
 
 	// Path to the .txt file that contains repository paths
-	repoFilePath := "/home/jacobrambarran/.dotfiles/github/repos.txt"
+	repoFilePath := os.Getenv("REPO_FPATH")
 
 	// Read the repository paths from the file
 	repoPaths, err := readRepoPaths(repoFilePath)
