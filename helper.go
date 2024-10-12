@@ -174,12 +174,8 @@ func main() {
 	openGit := flag.Bool("open-repo", false, "Open Repo in Current Directory on github.com")
 	flag.Parse()
 
-	if os.Args[1] == "push" {
-		msg := strings.Join(os.Args[2:], " ")
-		gitac(msg)
-	}
 	if *appendCwdFlag {
-		appendCwdToFile("/home/jacobrambarran/.dotfiles/github/repos.txt")
+		appendCwdToFile(os.Getenv("REPOS_FPATH"))
 	}
 
 	if *listReposFlag {
