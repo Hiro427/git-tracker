@@ -31,3 +31,9 @@ Add Current Working Directory to the txt
 Open current directory on Github.com
 
 `helper -open-repo`
+
+Update current repo: Add all Files, Commit files with message passed to flag, and pushes to main branch
+
+`helper -update-repo`
+
+These commands can also be accessed by `helper --help`
