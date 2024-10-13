@@ -202,10 +202,10 @@ func openRepo() {
 
 func main() {
 
-	appendCwdFlag := flag.Bool("track-repo", false, "Append the current working directory to repos.txt")
-	listReposFlag := flag.Bool("list-repos", false, "List all repositories in repos.txt")
-	openGit := flag.Bool("open-repo", false, "Open Repo in Current Directory on github.com")
-    pushGit := flag.String("update-repo", "", "Adds all Files, Commits files with message and pushes to main")
+	appendCwdFlag := flag.Bool("track", false, "Append the current working directory to repos.txt")
+	listReposFlag := flag.Bool("list", false, "List all repositories in repos.txt")
+	openGit := flag.Bool("open", false, "Open Repo in Current Directory on github.com")
+    pushGit := flag.String("sync", "", "Adds all Files, Commits files with message and pushes to main")
 	flag.Parse()
 
 	if *appendCwdFlag {
