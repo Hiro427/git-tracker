@@ -60,6 +60,7 @@ func gitStatus(path string) bool {
 	return stat
 }
 
+
 func gitac(commit string) {
 	gitAdd := exec.Command("git", "add", ".")
 	err := gitAdd.Run()
@@ -185,6 +186,20 @@ func printTable() {
 	writer.Flush()
 }
 
+func simpleGit() bool {
+	repoFP := os.Getenv("REPO_FPATH")
+	repoPaths, _ := readRepoPaths(repoFP)
+
+	for _, path := range repoPaths {
+		if gitStatus(path) {
+			return false
+		}
+	}
+
+	return true 
+}
+
+
 func openRepo() {
 
 	gitDir := filepath.Join(".git", "config")
@@ -206,6 +221,7 @@ func main() {
 	listReposFlag := flag.Bool("list", false, "List all repositories in repos.txt")
 	openGit := flag.Bool("open", false, "Open Repo in Current Directory on github.com")
     pushGit := flag.String("sync", "", "Adds all Files, Commits files with message and pushes to main")
+    quickCheck := flag.Bool("check", false, "Single Status Output")
 	flag.Parse()
 
 	if *appendCwdFlag {
@@ -222,6 +238,14 @@ func main() {
     if *pushGit != "" {
         gitac(*pushGit)
 
+    }
+    if *quickCheck {
+        status := simpleGit()
+        if status == true {
+            fmt.Println("clean")
+        }else {
+            fmt.Println("dirty")
+        }
     }
 
 }
