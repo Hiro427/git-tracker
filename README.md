@@ -1,8 +1,8 @@
-#About 
+## About 
 
 This is a simple git-tracker it will return a table via the terminal of all your tracked repositories. 
 
-#Usage 
+## Usage 
 
 #### Setup
 
