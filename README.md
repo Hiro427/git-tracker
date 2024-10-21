@@ -18,7 +18,7 @@ Example
 /home/user/dir/repo
 /home/user/dir/repo
 ```
-#### Commands
+## Commands
 
 List status of all repos in the txt 
 
