@@ -2,13 +2,14 @@ package main
 
 import (
 	"bufio"
-    "os/exec"
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
+
 	// "path"
+	"log"
 	"path/filepath"
-    "log"
 	"strings"
 	"text/tabwriter"
 
@@ -59,7 +60,6 @@ func gitStatus(path string) bool {
 	// Return the result after checking all files
 	return stat
 }
-
 
 func gitac(commit string) {
 	gitAdd := exec.Command("git", "add", ".")
@@ -128,7 +128,7 @@ func appendCwdToFile() error {
 		return fmt.Errorf("failed to get current directory: %w", err)
 	}
 
-    path := os.Getenv("REPO_FPATH")
+	path := os.Getenv("REPO_FPATH")
 
 	// Open the repos.txt file in append mode (or create it if it doesn't exist)
 	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -196,9 +196,8 @@ func simpleGit() bool {
 		}
 	}
 
-	return true 
+	return true
 }
-
 
 func openRepo() {
 
@@ -220,8 +219,8 @@ func main() {
 	appendCwdFlag := flag.Bool("track", false, "Append the current working directory to repos.txt")
 	listReposFlag := flag.Bool("list", false, "List all repositories in repos.txt")
 	openGit := flag.Bool("open", false, "Open Repo in Current Directory on github.com")
-    pushGit := flag.String("sync", "", "Adds all Files, Commits files with message and pushes to main")
-    quickCheck := flag.Bool("check", false, "Single Status Output")
+	pushGit := flag.String("sync", "", "Adds all Files, Commits files with message and pushes to main")
+	quickCheck := flag.Bool("check", false, "Single Status Output")
 	flag.Parse()
 
 	if *appendCwdFlag {
@@ -235,17 +234,17 @@ func main() {
 	if *openGit {
 		openRepo()
 	}
-    if *pushGit != "" {
-        gitac(*pushGit)
+	if *pushGit != "" {
+		gitac(*pushGit)
 
-    }
-    if *quickCheck {
-        status := simpleGit()
-        if status == true {
-            fmt.Println("clean")
-        }else {
-            fmt.Println("dirty")
-        }
-    }
+	}
+	if *quickCheck {
+		status := simpleGit()
+		if status == true {
+			fmt.Println("clean")
+		} else {
+			fmt.Println("dirty")
+		}
+	}
 
 }
